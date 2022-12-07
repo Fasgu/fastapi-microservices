@@ -2,17 +2,17 @@ import logging
 
 from fastapi import FastAPI
 
-from app.api import teams
+from app.api import items
 from app.db import init_db
 
 
 def create_application() -> FastAPI:
     application = FastAPI(
-        openapi_url="/teams/openapi.json",
-        docs_url="/teams/docs")
+        openapi_url="/items/openapi.json",
+        docs_url="/items/docs")
     application.include_router(
-        teams.router,
-        tags=["teams"])
+        items.router,
+        tags=["items"])
     return application
 
 
