@@ -15,7 +15,7 @@ async def get_all() -> List:
     return await ItemModel.all().values()
 
 
-async def post(payload: ItemPayloadSchema) -> int:
+async def post(payload: ItemPayloadSchema) -> ItemPayloadSchema:
     item = ItemModel(
         code=payload.code,
         name=payload.name,
@@ -33,11 +33,13 @@ async def delete(id: int) -> int:
 
 
 async def put(id: int, payload: ItemPayloadSchema) -> Optional[dict]:
-    item = await ItemModel.filter(id=id).update(code=payload.code,
+    item = await ItemModel.filter(id=id).update(
+        code=payload.code,
         name=payload.name,
         description=payload.description,
         purchase_price=payload.purchase_price,
-        sale_price=payload.sale_price)
+        sale_price=payload.sale_price
+    )
     if item:
         return await get(id)
     return None
@@ -45,5 +47,10 @@ async def put(id: int, payload: ItemPayloadSchema) -> Optional[dict]:
 
 async def validate_exists(code: str, name: str) -> bool:
     return await ItemModel.filter(code=code).exists() or await ItemModel.filter(name=name).exists()
+
+
+async def validate_exists_edit(id: int, code: str, name: str) -> bool:
+    return (await ItemModel.filter(code=code).exclude(id=id).exists()
+            or await ItemModel.filter(name=name).exclude(id=id).exists())
 
 

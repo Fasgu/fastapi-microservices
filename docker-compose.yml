@@ -1,26 +1,25 @@
 version: "3.9"
 
 services:
-  pokemon-service:
-    build: ./pokemon-service
-    command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
-    volumes:
-      - ./pokemon-service:/usr/src/app
-      - ./db-models/models:/usr/src/models
-    ports:
-      - 8001:8000
-    environment:
-      - DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5433/shedimorly
-      - TEAM_SERVICE_URL=http://host.docker.internal:8002/items/
-      - PYTHONPATH=/usr/src
-    depends_on:
-      - app-db
-
   item-service:
     build: ./item-service
     command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
     volumes:
       - ./item-service:/usr/src/app
+      - ./db-models/models:/usr/src/models
+    ports:
+      - 8001:8000
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5433/shedimorly
+      - PYTHONPATH=/usr/src
+    depends_on:
+      - app-db
+
+  person-service:
+    build: ./person-service
+    command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+    volumes:
+      - ./person-service:/usr/src/app
       - ./db-models/models:/usr/src/models
     ports:
       - 8002:8000
@@ -63,7 +62,7 @@ services:
       - ./nginx_config.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - item-service
-      - pokemon-service
+      - person-service
 volumes:
   postgres-data:
 networks:

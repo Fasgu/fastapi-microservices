@@ -6,8 +6,8 @@ class ItemModel(models.Model):
     code = fields.TextField(max_length=20)
     name = fields.TextField()
     description = fields.TextField(null=True)
-    purchase_price = fields.FloatField()
-    sale_price = fields.FloatField(decimal_places=2)
+    purchase_price = fields.DecimalField(max_digits=6, decimal_places=2)
+    sale_price = fields.DecimalField(max_digits=6, decimal_places=2)
     active = fields.BooleanField(default=True)
 
     def __str__(self):

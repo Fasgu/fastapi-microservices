@@ -2,17 +2,17 @@ import logging
 
 from fastapi import FastAPI
 
-from app.api import pokemon
+from app.api import persons
 from app.db import init_db
 
 
 def create_application() -> FastAPI:
     application = FastAPI(
-        openapi_url="/pokemon/openapi.json",
-        docs_url="/pokemon/docs")
+        openapi_url="/persons/openapi.json",
+        docs_url="/persons/docs")
     application.include_router(
-        pokemon.router,
-        tags=["pokemon"])
+        persons.router,
+        tags=["persons"])
     return application
 
 
