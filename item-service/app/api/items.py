@@ -1,3 +1,5 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from fastapi import APIRouter, status, Path, HTTPException
 from app.api import crud
@@ -5,6 +7,19 @@ from models.item import ItemSchema
 from app.models.pydantic import ItemPayloadSchema, ItemResponseSchema
 
 router = APIRouter(prefix="/items")
+
+app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"]
+)
 
 
 @router.get("/{id}/", response_model=ItemSchema)

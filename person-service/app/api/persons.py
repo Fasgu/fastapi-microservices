@@ -1,3 +1,5 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from fastapi import APIRouter, status, Path, HTTPException
 from app.api import crud
@@ -6,6 +8,15 @@ from app.models.pydantic import PersonPayloadSchema, PersonResponseSchema
 
 router = APIRouter(prefix="/persons")
 
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @router.get("/detail/{id}/", response_model=PersonSchema)
 async def get_person(id: int = Path(..., gt=0)) -> PersonSchema:
