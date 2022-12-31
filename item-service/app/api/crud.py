@@ -27,6 +27,17 @@ async def post(payload: ItemPayloadSchema) -> ItemPayloadSchema:
     return item
 
 
+async def insert_bulk(payload: List[ItemPayloadSchema]) -> None:
+    batch = [ItemModel(
+        code=row.code,
+        name=row.name,
+        description=row.description,
+        purchase_price=row.purchase_price,
+        sale_price=row.sale_price) for row in payload]
+
+    return await ItemModel.bulk_create(batch)
+
+
 async def delete(id: int) -> int:
     item = await ItemModel.filter(id=id).first().delete()
     return item

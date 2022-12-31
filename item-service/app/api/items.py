@@ -46,6 +46,11 @@ async def create_item(payload: ItemPayloadSchema) -> ItemResponseSchema:
         return item
 
 
+@router.post("/bulk/", status_code=status.HTTP_201_CREATED)
+async def insert_bulk_item(payload: List[ItemPayloadSchema]) -> None:
+    return await crud.insert_bulk(payload)
+
+
 @router.delete("/{id}/")
 async def delete_item(id: int = Path(..., gt=0)) -> int:
     await get_item_validation(id)
@@ -58,7 +63,7 @@ async def update_item(payload: ItemPayloadSchema, id: int = Path(..., gt=0)) -> 
     await get_item_validation(id)
 
     validate_exists = await crud.validate_exists_edit(
-        id, payload.type, payload.document_type, payload.document_number
+        id, payload.code, payload.name
     )
 
     if validate_exists:
