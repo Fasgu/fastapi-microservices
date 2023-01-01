@@ -8,6 +8,8 @@ from app.models.pydantic import PersonPayloadSchema, PersonResponseSchema
 
 router = APIRouter(prefix="/persons")
 
+app = FastAPI()
+
 origins = ["*"]
 
 app.add_middleware(
